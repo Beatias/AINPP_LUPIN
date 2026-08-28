@@ -35,7 +35,7 @@ class BaseForecaster(nn.Module):
 
 class MFUNetForecaster(BaseForecaster):
 
-"""
+    """
     Motion Field U-Net (MF-U-Net) forecaster.
 
     Estimates a 2-channel motion field (u, v) from the input sequence via a U-Net
@@ -82,7 +82,7 @@ class MFUNetForecaster(BaseForecaster):
         bilinear: bool = True,
         nonnegativity: str = "relu",
         return_motion_field: bool = False,   
-
+    ) -> None:
         super().__init__()
         logger.info("Initializing MFUNet forecaster.")
         self.input_timesteps = input_timesteps

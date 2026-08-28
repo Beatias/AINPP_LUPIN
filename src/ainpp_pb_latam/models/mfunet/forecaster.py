@@ -109,7 +109,7 @@ class MFUNetForecaster(BaseForecaster):
             bilinear=self.bilinear,
         )
 
- def _validate_cfg(self) -> None:
+    def _validate_cfg(self) -> None:
         if self.input_timesteps <= 0:
             raise ValueError("input_timesteps must be > 0.")
         if self.input_channels <= 0:

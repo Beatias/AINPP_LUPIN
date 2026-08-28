@@ -13,6 +13,38 @@ logger = logging.getLogger(__name__)
 
 
 class MFUNetBackbone(nn.Module):
+
+    """
+        U-Net-style encoder-decoder used as the motion-field estimator sub-network of the
+        MF-U-Net (Motion Field U-Net) stage of LUPIN.
+    
+        A single dropout layer is applied at the bottleneck (between encoder and decoder),
+        matching the original RainNet/MF-U-Net topology. The output head is selected by
+        `mode`: for "motion_field", the head always emits exactly 2 channels (the u, v
+        components of the estimated motion field), regardless of `out_channels` — see the
+        warning below.
+    
+        Parameters
+        ----------
+        in_channels:
+            Number of input channels (typically input_timesteps * input_channels, since
+            frames are stacked along the channel dimension before being fed to the network).
+        out_channels:
+            Number of output channels. Only used by the "regression" and "segmentation"
+            heads. Ignored by the "motion_field" head, which always outputs 2 channels
+            (u, v). Kept as an explicit constructor argument (rather than hard-coded) so
+            the class stays reusable for other modes/backbones in the benchmark.
+        features:
+            Number of channels at each encoder/decoder level.
+        kernel_size:
+            Convolution kernel size used throughout the network.
+        mode:
+            One of "regression", "segmentation", "motion_field". Selects the output head.
+        bilinear:
+            If True, uses bilinear upsampling in the decoder; otherwise uses transposed
+            convolutions.
+        """
+
     def __init__(
         self,
         in_channels: int,
@@ -87,6 +119,9 @@ class MFUNetBackbone(nn.Module):
             raise ValueError("kernel_size must be a positive odd integer.")
         if not isinstance(self.bilinear, bool):
             raise ValueError("bilinear must be a boolean.")
+        if self.mode not in ("regression", "segmentation", "motion_field"):
+            raise NotImplementedError(f"Mode '{self.mode}' is not implemented.")
+        
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         skips: List[torch.Tensor] = []

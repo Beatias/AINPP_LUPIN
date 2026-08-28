@@ -1,1 +1,1 @@
-from .forecaster import MFUnetForecaster
+from .forecaster import MFUNetForecaster

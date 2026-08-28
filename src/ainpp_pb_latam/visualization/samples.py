@@ -26,7 +26,7 @@ def save_epoch_sample(model, loader, epoch, device, save_dir="samples"):
         # Log Prediction
         # add dimension for channel
         inputs = inputs.unsqueeze(2)  # [Batch, T_in, 1, H, W]
-        outputs_log = model(inputs)
+        outputs = model(inputs)
         if isinstance(outputs, tuple):      # MFUNet com return_motion_field=True
             outputs_log, _motion_field = outputs
         else:

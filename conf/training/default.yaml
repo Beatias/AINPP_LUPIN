@@ -14,7 +14,7 @@ scheduler:
 
 checkpoint:
   enabled: true
-  dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}/early_stopping
+  dir: /content/drive/MyDrive/AINPP/outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}/early_stopping
   interval: 5
   save_best: true
 

@@ -78,9 +78,10 @@ class LogCoshLoss(nn.Module):
         super().__init__()
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        loss = torch.log(torch.cosh(input - target))
+        x = input - target
+        # Forma numericamente estável: evita overflow de exp()/cosh() para |x| grande
+        loss = torch.abs(x) + F.softplus(-2.0 * torch.abs(x)) - math.log(2.0)
         return loss.mean()
-
 
 class SSIMLoss(nn.Module):
     """

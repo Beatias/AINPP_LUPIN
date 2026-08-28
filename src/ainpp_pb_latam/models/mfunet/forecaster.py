@@ -77,6 +77,7 @@ class MFUNetForecaster(BaseForecaster):
         input_timesteps: int,
         input_channels: int,
         output_timesteps: int,
+        output_channels: int = 2,
         features: Sequence[int] = (64, 128, 256, 512),
         kernel_size: int = 3,
         bilinear: bool = True,
@@ -87,6 +88,7 @@ class MFUNetForecaster(BaseForecaster):
         logger.info("Initializing MFUNet forecaster.")
         self.input_timesteps = input_timesteps
         self.input_channels = input_channels
+        self.output_channels = output_channels
         self.output_timesteps = output_timesteps
         self.features = list(features)
         self.kernel_size = kernel_size
@@ -102,7 +104,7 @@ class MFUNetForecaster(BaseForecaster):
 
         self.backbone = MFUNetBackbone(
             in_channels=self.input_timesteps * self.input_channels,
-            out_channels=2,
+            out_channels=self.output_channels,
             features=self.features,
             kernel_size=self.kernel_size,
             mode="motion_field",

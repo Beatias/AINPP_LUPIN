@@ -71,6 +71,8 @@ class Evaluator:
 
                 # Direct or Autoregressive inference encapsulated in the model
                 output = self.model(data)  # [B, T, C, H, W] or similar
+                if isinstance(output, tuple):       # MFUNet com return_motion_field=True
+                    output, _motion_field = output
 
                 # Formato esperado: (B, LeadTimes, H, W)
                 if output.ndim == 5:
